@@ -1,0 +1,60 @@
+name: APK Android
+
+# Un APK est produit uniquement sur un tag de version (005 FR-002).
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # nécessaire pour créer la release et y attacher l'APK
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # le SDK Android y est préinstallé (plan R1)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - run: npm ci
+
+      # Un échec ici arrête tout : aucun APK n'est produit (FR-003).
+      - run: npm run typecheck
+      - run: npm test
+
+      - run: npm run build
+      - run: npx cap sync android
+
+      - name: Version issue du tag
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Construire l'APK
+        working-directory: android
+        run: |
+          ./gradlew assembleDebug \
+            -PversionName=${{ steps.version.outputs.value }} \
+            -PversionCode=${{ github.run_number }}
+
+      - name: Renommer l'APK
+        run: |
+          mv android/app/build/outputs/apk/debug/app-debug.apk \
+             carbumap-${{ steps.version.outputs.value }}.apk
+
+      # Crée la release du tag si elle n'existe pas, sinon y ajoute le fichier (FR-006).
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: carbumap-${{ steps.version.outputs.value }}.apk
+          body: |
+            APK de la version ${{ steps.version.outputs.value }}, signé avec la clé de débogage
+            d'Android : l'installation demande d'autoriser les « sources inconnues ».
+            Android 8.0 (API 26) minimum.

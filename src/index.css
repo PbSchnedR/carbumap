@@ -1,0 +1,239 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+/* Source unique des valeurs visuelles (004). Aucun composant n'écrit de couleur, de rayon,
+   d'ombre ni de taille de texte en dur : tout vient d'ici. */
+@theme {
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f6f9;
+  --color-canvas: #e9edf2;
+  --color-ink: #10151c;
+  --color-muted: #4d5765;
+  --color-line: #dde3ea;
+  --color-brand: #1d4ed8;
+  --color-brand-ink: #ffffff;
+  --color-brand-soft: #e7edfd;
+  --color-cheap: #036b45;
+  --color-cheap-ink: #ffffff;
+  --color-cheap-soft: #e3f5ec;
+  --color-stale: #8a4b00;
+  --color-stale-soft: #fdf0dc;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fdecea;
+  --color-overlay: rgb(16 21 28 / 0.55);
+
+  --radius-pill: 999px;
+  --radius-card: 1rem;
+  --radius-sheet: 1.5rem;
+
+  --shadow-float: 0 1px 2px rgb(16 21 28 / 0.16), 0 6px 16px -6px rgb(16 21 28 / 0.24);
+  --shadow-panel: 0 0 0 1px rgb(16 21 28 / 0.06), 0 12px 32px -12px rgb(16 21 28 / 0.35);
+
+  --text-label: 0.8125rem;
+  --text-body: 1rem;
+  --text-price: 1.25rem;
+  --text-title: 1.375rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+}
+
+/* Thème sombre : seules les couleurs changent, les utilitaires pointant vers ces variables. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #161b22;
+    --color-surface-2: #1d232c;
+    --color-canvas: #0d1117;
+    --color-ink: #eef2f7;
+    --color-muted: #a3adbb;
+    --color-line: #2b323c;
+    --color-brand: #8ab0ff;
+    --color-brand-ink: #10151c;
+    --color-brand-soft: #21304d;
+    --color-cheap: #4ade9f;
+    --color-cheap-ink: #06251a;
+    --color-cheap-soft: #143528;
+    --color-stale: #f0b866;
+    --color-stale-soft: #3a2a12;
+    --color-danger: #ff9d95;
+    --color-danger-soft: #3a1c19;
+    --color-overlay: rgb(0 0 0 / 0.6);
+
+    --shadow-float: 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 16px -6px rgb(0 0 0 / 0.65);
+    --shadow-panel: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -12px rgb(0 0 0 / 0.8);
+  }
+}
+
+:root {
+  color-scheme: light dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 100%;
+  line-height: 1.4;
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Hauteur réellement visible sur mobile, barres du navigateur exclues. */
+#root {
+  height: 100dvh;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+/* Un seul mouvement dans toute l'application. */
+.motion {
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Leaflet ------------------------------------------------------------ */
+
+/* Boutons de zoom : 30 px par défaut, portés à 44 px (constitution IV). */
+.leaflet-bar a,
+.leaflet-touch .leaflet-bar a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 22px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-bottom-color: var(--color-line);
+}
+
+.leaflet-bar a:hover {
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+}
+
+.leaflet-touch .leaflet-bar,
+.leaflet-bar {
+  border: 0;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-float);
+}
+
+/* Contrôles et attribution sous la barre des filtres, qui flotte au-dessus de la carte. */
+.leaflet-top.leaflet-right {
+  margin-top: var(--map-controls-top, 0px);
+}
+
+.leaflet-container {
+  font-family: inherit;
+  background: var(--color-canvas);
+}
+
+.leaflet-control-attribution {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  box-shadow: var(--shadow-float);
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-muted);
+}
+
+/* Fond de carte atténué la nuit : uniquement les tuiles, ni les repères ni l'attribution (plan R2). */
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile {
+    filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88) saturate(0.7);
+  }
+}
+
+/* --- Étiquettes de prix sur la carte (L.divIcon) ------------------------- */
+
+.price-marker {
+  /* Boîte de 44 × 44 px : zone touchable (003 FR-004) ; l'étiquette reste de sa taille. */
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.price-marker__label {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  /* Bordure `muted` et non `line` : l'étiquette doit se détacher du fond de carte (≥ 3:1). */
+  border: 1.5px solid var(--color-muted);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  box-shadow: var(--shadow-float);
+  font-variant-numeric: tabular-nums;
+}
+
+.price-marker__label::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--color-surface);
+  border-bottom: 0;
+}
+
+.price-marker--cheapest .price-marker__label {
+  background: var(--color-cheap);
+  border-color: var(--color-cheap);
+  color: var(--color-cheap-ink);
+  font-weight: 800;
+}
+
+.price-marker--cheapest .price-marker__label::after {
+  border-top-color: var(--color-cheap);
+}
+
+.price-marker--selected .price-marker__label {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+.origin-marker {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  border: 3px solid var(--color-surface);
+  box-shadow: 0 0 0 2px var(--color-brand);
+}

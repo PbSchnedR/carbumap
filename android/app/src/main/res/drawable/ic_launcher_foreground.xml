@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icône Carbumap : repère de carte + goutte, dessiné en vectoriel (aucun outil externe). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:translateX="22" android:translateY="22">
+        <!-- Repère -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M32,12c-7.7,0 -14,6.1 -14,13.7c0,9.9 12.2,23.2 12.7,23.8c0.7,0.8 1.9,0.8 2.6,0C33.8,48.9 46,35.6 46,25.7C46,18.1 39.7,12 32,12Z" />
+        <!-- Goutte -->
+        <path
+            android:fillColor="#4ADE9F"
+            android:pathData="M32,18.5c-3.2,3.7 -5.6,7.1 -5.6,9.9a5.6,5.6 0 0 0 11.2,0C37.6,25.6 35.2,22.2 32,18.5Z" />
+    </group>
+</vector>
