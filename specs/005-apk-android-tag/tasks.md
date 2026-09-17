@@ -27,7 +27,7 @@ Racine du projet ; nouveaux dossiers `android/` et `.github/workflows/`.
 
 ## Phase 1: Setup
 
-- [ ] T001 Create the first Git commit: add a `.gitignore` entry for Android build outputs (`android/.gradle/`, `android/app/build/`, `android/build/`, `android/local.properties`, `android/.idea/`, `*.apk`), then commit the whole project as it stands
+- [X] T001 Create the first Git commit: add a `.gitignore` entry for Android build outputs (`android/.gradle/`, `android/app/build/`, `android/build/`, `android/local.properties`, `android/.idea/`, `*.apk`), then commit the whole project as it stands
 - [ ] T002 **User action required**: create the **public** GitHub repository, add it as `origin` and push `master`; without it nothing in US1 can be verified (FR-001)
 
 ---
@@ -118,6 +118,6 @@ Racine du projet ; nouveaux dossiers `android/` et `.github/workflows/`.
 ## Phase 6: Convergence
 
 - [ ] T022 **User action**: make the repository real — first commit, then create the public GitHub repository, add it as `origin` and push; nothing in US1 can run before this per FR-001 (missing)
-- [ ] T023 Fix the launcher icon below Android 8 in `android/app/src/main/res/`: the adaptive icon (`mipmap-anydpi-v26`) uses the project vector, but the legacy PNGs (`mipmap-*dpi/ic_launcher*.png`) are still Capacitor defaults; either generate the project PNGs for the five densities or raise `minSdkVersion` to 26 in `android/variables.gradle` and drop the PNGs per FR-010 (partial)
+- [X] T023 Fix the launcher icon below Android 8 in `android/app/src/main/res/`: the adaptive icon (`mipmap-anydpi-v26`) uses the project vector, but the legacy PNGs (`mipmap-*dpi/ic_launcher*.png`) are still Capacitor defaults; either generate the project PNGs for the five densities or raise `minSdkVersion` to 26 in `android/variables.gradle` and drop the PNGs per FR-010 (partial)
 - [ ] T024 Prove the Gradle build once the repository exists: push `v0.0.1-test`, check that `-PversionName`/`-PversionCode` reach the APK and that the release carries `carbumap-0.0.1-test.apk`; record the run duration in `specs/005-apk-android-tag/plan.md` per FR-004, SC-001 (partial)
-- [ ] T025 Load `@capacitor/app` and `@capacitor/geolocation` only on a native platform (dynamic import in `src/hooks/useAndroidBackButton.ts` and `src/lib/geolocation.ts`), so the web bundle drops the ~3.8 KB they add, keeping `navigator.geolocation` as the web path (unrequested)
+- [X] T025 Load `@capacitor/app` and `@capacitor/geolocation` only on a native platform (dynamic import in `src/hooks/useAndroidBackButton.ts` and `src/lib/geolocation.ts`), so the web bundle drops the ~3.8 KB they add, keeping `navigator.geolocation` as the web path (unrequested)
