@@ -182,8 +182,9 @@ plus bas.
 - **FR-010**: Sur la carte, chaque repère de station MUST afficher le prix du carburant choisi, au même
   format que la liste. Le repère du prix le plus bas MUST être distingué (FR-009) et, avec celui de la
   station sélectionnée, affiché au-dessus des autres repères.
-- **FR-011**: À partir de 768 px de large, la carte MUST occuper la fenêtre et la liste MUST être
-  visible en permanence dans un panneau latéral.
+- **FR-011**: ~~À partir de 768 px de large, la carte MUST occuper la fenêtre et la liste MUST être
+  visible en permanence dans un panneau latéral.~~ **Remplacée par 006 FR-002** (2026-09-17) : sur
+  ordinateur, le tableau comparatif devient l'élément principal et la carte passe en bandeau.
 - **FR-012**: Le passage d'une présentation à l'autre (redimensionnement, rotation) MUST conserver le
   carburant, le rayon, les résultats et la station sélectionnée.
 - **FR-013**: Le choix du rayon (5/10/20 km) et « Chercher ici » MUST rester accessibles sans ouvrir le

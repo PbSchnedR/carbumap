@@ -48,7 +48,10 @@ npm run preview
 
 ## 4. Ordinateur (US4)
 
-1. Fenêtre 1280 × 800 : carte + panneau latéral visibles en même temps, mêmes carburants et mise en
+> Depuis 006, la présentation sur ordinateur est un tableau comparatif sous un bandeau de carte ; le
+> panneau latéral décrit ici n'existe plus. Voir [006 quickstart](../006-affichage-informations/quickstart.md) §2.
+
+1. Fenêtre 1280 × 800 : carte et stations visibles en même temps, mêmes carburants et mise en
    avant.
 2. Sélectionner une station, choisir SP98 / 20 km, puis rétrécir sous 768 px et revenir : carburant,
    rayon, résultats et sélection conservés (FR-012).

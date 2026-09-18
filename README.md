@@ -3,12 +3,17 @@
 Carte web des stations-service autour de vous, classées de la moins chère à la plus chère pour le
 carburant choisi (Gazole, SP95, E10, SP98, E85, GPL).
 
-- Localisation de l'appareil, ou recherche autour du centre de la carte (« Chercher ici »).
+- Localisation de l'appareil, ou recherche autour du centre de la carte : le bouton « Chercher ici »
+  apparaît sur la carte dès qu'on la déplace ou qu'on zoome, et disparaît une fois la recherche faite.
 - Rayon de 5, 10 ou 20 km.
 - Prix, distance à vol d'oiseau et date de mise à jour ; prix de plus de 7 jours signalés « ancien ».
 - Station(s) au prix le plus bas mises en avant dans la liste et sur la carte.
-- Sur mobile : carte plein écran et liste dans un panneau glissant (replié, mi-hauteur, plein écran).
-  Sur ordinateur : liste dans un panneau latéral.
+- Sur ordinateur : tableau comparatif triable (prix, distance, adresse, mise à jour) dans une colonne
+  à gauche, la carte occupant toute la hauteur à droite. La fiche d'une station s'ouvre dans cette
+  colonne, par-dessus le tableau, et le bouton de retour restitue le tri et le défilement.
+- Sur mobile : carte plein écran, deux rangées de commandes posées dessus (les six carburants tous
+  visibles, sans défilement horizontal), et la liste dans un panneau glissant (replié, mi-hauteur,
+  plein écran) où le prix domine chaque ligne.
 - Sélection d'une station depuis la liste **ou** depuis son étiquette de prix sur la carte.
 - Recherche d'un lieu (ville ou adresse) pour voir les prix ailleurs, avec retour à sa position.
 - Fiche station : distance, prix de tous les carburants proposés, photo de rue quand il en existe une,
@@ -37,7 +42,9 @@ Autres services, eux aussi sans clé :
 
 ## Design
 
-Direction « carte d'abord » : la carte occupe l'écran, les commandes sont des pastilles flottantes.
+Direction « carte d'abord » sur mobile : la carte occupe l'écran et les commandes flottent dessus,
+regroupées en contrôles segmentés — un bloc par choix, l'option active en plein, rien qui défile.
+Sur ordinateur, deux zones : la colonne des stations à gauche, la carte pleine hauteur à droite.
 Thèmes clair et sombre suivant le réglage du système (aucun bouton : `prefers-color-scheme`), fond de
 carte atténué la nuit. Toutes les valeurs visuelles (couleurs, rayons, ombres, tailles de texte,
 durée d'animation) sont des tokens déclarés une seule fois dans `src/index.css`, avec une valeur
@@ -47,7 +54,11 @@ dans les deux thèmes, animations coupées avec « réduire les animations ».
 ## Pile technique
 
 React 19 · TypeScript 7 · Tailwind CSS 4 · Leaflet 1.9 (tuiles OpenStreetMap) ·
-react-modal-sheet (panneau mobile) · Capacitor 8 (enveloppe Android) · Vite 8 · Vitest 5.
+react-modal-sheet (panneau mobile) · IBM Plex Sans (police auto-hébergée, donc identique hors ligne) ·
+Capacitor 8 (enveloppe Android) · Vite 8 · Vitest 5.
+
+Les pictogrammes sont huit tracés SVG écrits dans `src/components/icons.tsx` : pas de librairie
+d'icônes, et aucun emoji dans l'interface.
 
 ## Application Android (APK)
 

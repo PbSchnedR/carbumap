@@ -126,7 +126,9 @@ rayon, ombre, taille de texte, couleur) provient d'une échelle documentée, san
   sous forme d'éléments flottants, sans bandeau opaque pleine largeur sur mobile.
 - **FR-003**: Sur mobile, les commandes visibles hors panneau MUST occuper au plus 20 % de la hauteur
   de l'écran.
-- **FR-004**: Sur ordinateur (≥ 768 px), la carte MUST occuper au moins 65 % de la largeur de la fenêtre.
+- **FR-004**: ~~Sur ordinateur (≥ 768 px), la carte MUST occuper au moins 65 % de la largeur de la
+  fenêtre.~~ **Remplacée par 006 FR-002** (2026-09-17) : la carte devient un bandeau au-dessus du
+  tableau comparatif.
 - **FR-005**: L'application MUST proposer un thème clair et un thème sombre, choisis automatiquement
   d'après le réglage du système, et MUST suivre un changement de ce réglage sans rechargement.
 - **FR-006**: Le thème sombre MUST s'appliquer à tous les éléments, y compris les repères de prix, les
@@ -164,7 +166,8 @@ Aucune nouvelle donnée. Une notion de présentation s'ajoute :
 ### Measurable Outcomes
 
 - **SC-001**: Sur un écran de 360 × 740, les commandes hors panneau occupent au plus 20 % de la hauteur.
-- **SC-002**: Sur une fenêtre de 1280 × 800, la carte occupe au moins 65 % de la largeur.
+- **SC-002**: ~~Sur une fenêtre de 1280 × 800, la carte occupe au moins 65 % de la largeur.~~
+  **Remplacé par 006 SC-001** : au moins 10 stations lisibles sans défiler sur cette même fenêtre.
 - **SC-003**: 100 % des couples couleur texte / fond utilisés atteignent 4,5:1 (texte courant) ou 3:1
   (grands textes, icônes, repères), dans les deux thèmes.
 - **SC-004**: Le changement de thème système est répercuté en moins d'une seconde, sans rechargement et

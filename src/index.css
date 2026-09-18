@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 @import 'leaflet/dist/leaflet.css';
+/* Police auto-hébergée : aucun appel réseau, donc identique hors ligne dans l'APK (007 FR-012).
+   `wght.css` est la variante la plus légère du paquet — axe de graisse seul, ni italique ni largeur.
+   Les `unicode-range` font que le navigateur ne télécharge que le latin (45 ko). */
+@import '@fontsource-variable/ibm-plex-sans/wght.css';
 
 /* Source unique des valeurs visuelles (004). Aucun composant n'écrit de couleur, de rayon,
    d'ombre ni de taille de texte en dur : tout vient d'ici. */
@@ -21,6 +25,19 @@
   --color-danger: #b3261e;
   --color-danger-soft: #fdecea;
   --color-overlay: rgb(16 21 28 / 0.55);
+
+  /* Police de l'application (007 FR-010). Le repli système reste lisible pendant le `swap`. */
+  --font-sans: 'IBM Plex Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+
+  /* Icônes : une seule graisse de tracé, une seule taille, partout (007 FR-016). */
+  --icon-stroke: 1.75;
+  --icon-size: 1em;
+
+  /* Colonne des stations sur ordinateur (007 FR-003). Plancher 380 px entre 768 et 1024 px
+     (dégradation prévue par FR-008) ; plafond 520 px pour que les grands écrans profitent
+     à la carte (SC-003). */
+  --panel-width: clamp(380px, 36vw, 520px);
 
   --radius-pill: 999px;
   --radius-card: 1rem;
@@ -66,7 +83,7 @@
 
 :root {
   color-scheme: light dark;
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   font-size: 100%;
   line-height: 1.4;
   color: var(--color-ink);
@@ -202,6 +219,13 @@ input {
   font-variant-numeric: tabular-nums;
 }
 
+/* L'étoile du prix le plus bas est une icône SVG (007 FR-016), plus un caractère : elle doit être
+   centrée sur la ligne du prix et ne jamais se comprimer. */
+.price-marker__label svg {
+  flex: none;
+  display: block;
+}
+
 .price-marker__label::after {
   content: '';
   position: absolute;
@@ -217,7 +241,7 @@ input {
   background: var(--color-cheap);
   border-color: var(--color-cheap);
   color: var(--color-cheap-ink);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .price-marker--cheapest .price-marker__label::after {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDistance, formatPrice, formatUpdatedAt } from '../../src/domain/format';
+import { formatDistance, formatPrice, formatPriceValue, formatUpdatedAt } from '../../src/domain/format';
 
 describe('formatDistance', () => {
   it('affiche les distances sous 1 km en mètres arrondis à la dizaine', () => {
@@ -15,6 +15,14 @@ describe('formatDistance', () => {
 
   it("n'affiche pas « 1000 m » juste sous 1 km", () => {
     expect(formatDistance(0.998)).toBe('1,0 km');
+  });
+});
+
+describe('formatPriceValue', () => {
+  it('donne la valeur seule, sans unité, toujours à trois décimales', () => {
+    expect(formatPriceValue(2.449)).toBe('2,449');
+    expect(formatPriceValue(2)).toBe('2,000');
+    expect(formatPriceValue(1.7)).toBe('1,700');
   });
 });
 

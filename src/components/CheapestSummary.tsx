@@ -1,6 +1,6 @@
 import { formatDistance, formatPrice } from '../domain/format';
 import type { RankedStation } from '../domain/ranking';
-import { CheapestBadge, locality } from './StationList';
+import { CheapestBadge, addressLine } from './badges';
 
 type Props = { ranked: RankedStation[]; lowestIds: Set<number> };
 
@@ -19,13 +19,13 @@ export function CheapestSummary({ ranked, lowestIds }: Props) {
             {ranked.length} station{ranked.length > 1 ? 's' : ''}
           </span>
         </div>
-        <p className="mt-1 truncate text-body font-semibold">{first.station.address || locality(first.station)}</p>
+        <p className="mt-1 truncate text-body font-semibold">{addressLine(first.station)}</p>
         <p className="truncate text-label text-muted tabular-nums">
           {formatDistance(first.distanceKm)}
           {ties > 1 && ` · ${ties} stations au même prix`}
         </p>
       </div>
-      <span className="text-title font-extrabold whitespace-nowrap text-cheap tabular-nums">
+      <span className="text-title font-bold whitespace-nowrap text-cheap tabular-nums">
         {formatPrice(first.price.price)}
       </span>
     </div>

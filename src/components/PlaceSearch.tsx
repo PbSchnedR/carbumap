@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Place } from '../domain/places';
 import { usePlaceSearch } from '../hooks/usePlaceSearch';
+import { Icon } from './icons';
 
 type Props = {
   onSelect: (place: Place) => void;
@@ -108,7 +109,7 @@ export function PlaceSearch({ onSelect, variant }: Props) {
   if (variant === 'inline') return <div className="px-3 pb-1">{field}</div>;
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative shrink-0">
       <button
         type="button"
         aria-label="Chercher un lieu"
@@ -117,9 +118,9 @@ export function PlaceSearch({ onSelect, variant }: Props) {
           setIsOpen((open) => !open);
           setTimeout(() => inputRef.current?.focus(), 0);
         }}
-        className="motion inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-pill border border-line bg-surface text-ink shadow-float focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        className="motion inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-pill border border-line bg-surface text-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
-        <span aria-hidden="true">🔍</span>
+        <Icon name="search" />
       </button>
       {isOpen && <div className="absolute top-12 right-0 z-20 w-[min(20rem,calc(100vw-1.5rem))]">{field}</div>}
     </div>

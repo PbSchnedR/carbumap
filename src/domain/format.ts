@@ -17,9 +17,17 @@ export function formatDistance(km: number): string {
   return `${withComma(km.toFixed(1))} km`;
 }
 
+/**
+ * « 2,449 » — valeur seule, sans unité. Employée dans le tableau, où l'unité est portée une fois
+ * par l'en-tête de colonne plutôt que répétée à chaque ligne (007).
+ */
+export function formatPriceValue(eurosPerLitre: number): string {
+  return withComma(eurosPerLitre.toFixed(3));
+}
+
 /** « 2,449 €/L » */
 export function formatPrice(eurosPerLitre: number): string {
-  return `${withComma(eurosPerLitre.toFixed(3))} €/L`;
+  return `${formatPriceValue(eurosPerLitre)} €/L`;
 }
 
 function parisParts(date: Date): Record<string, string> {

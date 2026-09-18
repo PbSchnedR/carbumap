@@ -45,7 +45,7 @@ export function StatusMessage({ status, isEmpty, onRetry }: Props) {
         <button
           type="button"
           onClick={onRetry}
-          className="motion mt-2 min-h-11 rounded-pill border-2 border-danger px-4 font-semibold text-danger focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="motion mt-2 inline-flex min-h-11 items-center rounded-pill border border-danger px-4 text-label font-semibold text-danger focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-brand"
         >
           Réessayer
         </button>
