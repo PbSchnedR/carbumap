@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carbumap — Politique de confidentialité</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --ink: #10151c;
+        --muted: #4d5765;
+        --surface: #ffffff;
+        --line: #dde3ea;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #eef2f7;
+          --muted: #a3adbb;
+          --surface: #0d1117;
+          --line: #2b323c;
+        }
+      }
+      body {
+        margin: 0 auto;
+        max-width: 42rem;
+        padding: 2rem 1rem 4rem;
+        background: var(--surface);
+        color: var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+      }
+      h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.25rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin-top: 2.25rem;
+        border-top: 1px solid var(--line);
+        padding-top: 1.25rem;
+      }
+      .date {
+        color: var(--muted);
+        margin-top: 0;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 0.75rem;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 0.5rem 0.6rem;
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.95rem;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      code {
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Politique de confidentialité — Carbumap</h1>
+    <p class="date">Dernière mise à jour : 18 septembre 2026</p>
+
+    <p>
+      Carbumap affiche les prix des carburants des stations-service autour de vous. L'application
+      fonctionne entièrement sur votre appareil : elle n'a pas de serveur, pas de compte utilisateur,
+      pas de publicité et pas d'outil de mesure d'audience.
+    </p>
+
+    <h2>Aucun compte, aucun profil</h2>
+    <p>
+      Carbumap ne vous demande ni nom, ni adresse e-mail, ni numéro de téléphone. Aucun identifiant
+      publicitaire n'est lu. Rien ne permet de vous reconnaître d'une utilisation à l'autre.
+    </p>
+
+    <h2>Votre position</h2>
+    <p>
+      Si vous l'autorisez, l'application lit la position de votre appareil pour classer les stations
+      de la plus proche à la plus lointaine. Cette position <strong>n'est jamais enregistrée</strong>,
+      ni sur l'appareil ni ailleurs : elle est utilisée le temps de la recherche, puis oubliée.
+    </p>
+    <p>
+      Pour obtenir la liste des stations proches, vos coordonnées sont envoyées au service public de
+      données qui héberge les prix. Sans cet envoi, l'application ne peut pas savoir quelles stations
+      vous concernent. Vous pouvez refuser la localisation : l'application reste utilisable en
+      cherchant une ville ou une adresse.
+    </p>
+
+    <h2>Services consultés</h2>
+    <p>Carbumap interroge directement ces services depuis votre appareil, sans intermédiaire :</p>
+    <table>
+      <tr>
+        <th>Service</th>
+        <th>Ce qui lui est transmis</th>
+        <th>Pourquoi</th>
+      </tr>
+      <tr>
+        <td><code>data.economie.gouv.fr</code><br />(ministère de l'Économie)</td>
+        <td>Les coordonnées du point de recherche</td>
+        <td>Obtenir les stations et leurs prix autour de ce point</td>
+      </tr>
+      <tr>
+        <td><code>api-adresse.data.gouv.fr</code><br />(Base Adresse Nationale)</td>
+        <td>Le texte que vous saisissez dans la recherche de lieu</td>
+        <td>Trouver la ville ou l'adresse demandée</td>
+      </tr>
+      <tr>
+        <td><code>tile.openstreetmap.org</code></td>
+        <td>Les coordonnées des tuiles de carte affichées</td>
+        <td>Afficher le fond de carte</td>
+      </tr>
+      <tr>
+        <td><code>api.panoramax.xyz</code></td>
+        <td>Les coordonnées de la station consultée</td>
+        <td>Afficher une photo de rue quand il en existe une</td>
+      </tr>
+    </table>
+    <p>
+      Ces services appliquent leurs propres politiques de confidentialité et peuvent conserver des
+      journaux techniques, comme tout serveur web. Carbumap ne leur transmet aucune donnée vous
+      identifiant.
+    </p>
+
+    <h2>Ce qui est conservé sur votre appareil</h2>
+    <p>
+      Deux préférences seulement : le carburant choisi et le rayon de recherche. Elles restent dans le
+      stockage local de l'application, ne sont envoyées nulle part, et disparaissent si vous
+      désinstallez l'application ou effacez ses données.
+    </p>
+
+    <h2>Enfants</h2>
+    <p>
+      Carbumap ne s'adresse pas particulièrement aux enfants et ne collecte sciemment aucune donnée
+      les concernant.
+    </p>
+
+    <h2>Vos droits</h2>
+    <p>
+      Comme aucune donnée personnelle n'est collectée ni conservée par Carbumap, il n'y a rien à
+      consulter, corriger ou supprimer de notre côté. Pour retirer l'accès à votre position, utilisez
+      les réglages d'autorisations d'Android.
+    </p>
+
+    <h2>Modifications</h2>
+    <p>
+      Toute évolution de cette politique sera publiée sur cette page, avec une nouvelle date de mise à
+      jour.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Question ou remarque :
+      <a href="https://github.com/PbSchnedR/carbumap/issues">github.com/PbSchnedR/carbumap/issues</a>.
+    </p>
+  </body>
+</html>

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+// Signature de publication : la clé n'est jamais dans le dépôt (constitution, principe V).
+// Elle arrive par variables d'environnement, renseignées par l'action GitHub à partir des secrets.
+// Sans elles — build local, fork — on retombe sur la clé de débogage : rien ne casse.
+def releaseKeystore = System.getenv('KEYSTORE_PATH')
+def hasReleaseKeystore = releaseKeystore != null && !releaseKeystore.isEmpty() && file(releaseKeystore).exists()
+
 android {
     namespace = "fr.carbumap.app"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -17,8 +23,19 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            release {
+                storeFile file(releaseKeystore)
+                storePassword System.getenv('KEYSTORE_PASSWORD')
+                keyAlias System.getenv('KEY_ALIAS')
+                keyPassword System.getenv('KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
         release {
+            signingConfig hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

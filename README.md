@@ -20,6 +20,12 @@ carburant choisi (Gazole, SP95, E10, SP98, E85, GPL).
 
 Projet personnel, sans backend ni clé d'API.
 
+## Confidentialité
+
+Aucun compte, aucune publicité, aucune mesure d'audience. Seuls le carburant et le rayon choisis
+sont conservés localement. La position sert au classement et n'est jamais enregistrée. Détail des
+services interrogés : [docs/confidentialite.html](docs/confidentialite.html).
+
 ## Données
 
 Prix publiés par l'État, lus directement depuis le navigateur via l'API Explore v2.1 de
@@ -67,11 +73,18 @@ et l'attache à la release correspondante (créée si besoin).
 ```bash
 git tag v1.0.0 && git push origin v1.0.0   # publie la version 1.0.0
 npm run android:sync                        # recopie dist/ dans le projet Android
-npm run android:apk                         # construit l'APK en local (SDK Android requis)
+npm run android:apk                         # construit l'APK de débogage en local
 ```
 
-- **Installation** : télécharger l'APK depuis la release, puis autoriser les « sources inconnues » —
-  l'APK est signé avec la clé de débogage d'Android, sans secret dans le dépôt.
+Chaque tag produit deux fichiers : un `.apk` pour l'installation directe et un `.aab` destiné au
+Play Store. Le `versionCode` est dérivé du tag (`v1.2.3` → `10203`) et non du numéro d'exécution,
+parce que Play exige un entier strictement croissant et refuse définitivement un numéro déjà employé.
+
+La signature de publication vient de quatre secrets GitHub (`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`,
+`KEY_ALIAS`, `KEY_PASSWORD`) ; la clé n'est jamais dans le dépôt. Sans ces secrets, la construction
+retombe sur la clé de débogage et reste fonctionnelle.
+
+- **Installation** : télécharger l'APK depuis la release, puis autoriser les « sources inconnues ».
 - **Android 8.0 (API 26) minimum** : l'icône du projet est vectorielle (icône adaptative).
 - L'application demande l'autorisation de localisation ; le bouton « retour » ferme d'abord la fiche
   station, puis replie la liste, puis quitte.

@@ -172,8 +172,9 @@ vérifier qu'une liste de stations classées s'affiche.
 - **Emballage** : l'application web est empaquetée dans une application Android qui l'embarque
   (approche retenue lors des clarifications) ; l'application reste dépendante du réseau pour les prix,
   les photos et les tuiles de carte.
-- **Signature** : APK signé avec une clé de débogage par défaut, donc installable en autorisant les
-  « sources inconnues ». Une signature de publication (clé stockée en secret GitHub) reste possible
+- **Signature** : ~~APK signé avec une clé de débogage par défaut~~ — **mis en place le 2026-09-18** :
+  la signature de publication existe, la clé venant de secrets GitHub, et le tag produit aussi un AAB
+  pour le Play Store. Installable en autorisant les « sources inconnues ». Une signature de publication (clé stockée en secret GitHub) reste possible
   plus tard sans changer le reste.
 - **Distribution** : par la release GitHub uniquement ; aucune publication sur le Play Store, qui
   demanderait un compte développeur payant et une signature de publication.

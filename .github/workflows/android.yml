@@ -7,11 +7,15 @@ on:
       - 'v*'
 
 permissions:
-  contents: write # nécessaire pour créer la release et y attacher l'APK
+  contents: write # nécessaire pour créer la release et y attacher les fichiers
 
 jobs:
   build:
     runs-on: ubuntu-latest # le SDK Android y est préinstallé (plan R1)
+    # Le contexte `secrets` n'est pas lisible dans un `if:` d'étape ; on le transforme ici en
+    # simple booléen, ce qui est autorisé au niveau du job.
+    env:
+      HAS_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,34 +31,71 @@ jobs:
 
       - run: npm ci
 
-      # Un échec ici arrête tout : aucun APK n'est produit (FR-003).
+      # Un échec ici arrête tout : aucun artefact n'est produit (FR-003).
       - run: npm run typecheck
       - run: npm test
 
       - run: npm run build
       - run: npx cap sync android
 
+      # versionCode dérivé du tag, et non du numéro d'exécution : Play exige un entier
+      # strictement croissant et refuse à jamais un numéro déjà utilisé. Un compteur
+      # d'exécutions repartirait à 1 si le workflow était renommé ou recréé.
+      # v1.2.3 -> 10203. Chaque composant doit rester sous 100.
       - name: Version issue du tag
         id: version
-        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+        run: |
+          name="${GITHUB_REF_NAME#v}"
+          IFS=. read -r major minor patch <<< "$name"
+          code=$(( ${major:-0} * 10000 + ${minor:-0} * 100 + ${patch:-0} ))
+          if [ "$code" -le 0 ]; then
+            echo "::error::versionCode calculé à $code depuis le tag $GITHUB_REF_NAME ; utilisez un tag vMAJEUR.MINEUR.CORRECTIF."
+            exit 1
+          fi
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
 
-      - name: Construire l'APK
+      # La clé de publication n'existe que le temps du job. Sans le secret, Gradle retombe
+      # sur la clé de débogage (voir android/app/build.gradle) : le build reste vert.
+      - name: Déchiffrer le keystore
+        id: keystore
+        if: env.HAS_KEYSTORE == 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/carbumap.jks"
+          echo "path=$RUNNER_TEMP/carbumap.jks" >> "$GITHUB_OUTPUT"
+
+      # `bundleRelease` produit l'AAB attendu par le Play Store ; `assembleRelease` produit
+      # l'APK pour l'installation directe depuis la release GitHub.
+      - name: Construire l'AAB et l'APK
         working-directory: android
+        env:
+          KEYSTORE_PATH: ${{ steps.keystore.outputs.path }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          ./gradlew assembleDebug \
-            -PversionName=${{ steps.version.outputs.value }} \
-            -PversionCode=${{ github.run_number }}
+          ./gradlew bundleRelease assembleRelease \
+            -PversionName=${{ steps.version.outputs.name }} \
+            -PversionCode=${{ steps.version.outputs.code }}
 
-      - name: Renommer l'APK
+      - name: Renommer les artefacts
         run: |
-          mv android/app/build/outputs/apk/debug/app-debug.apk \
-             carbumap-${{ steps.version.outputs.value }}.apk
+          v="${{ steps.version.outputs.name }}"
+          mv android/app/build/outputs/bundle/release/app-release.aab "carbumap-$v.aab"
+          mv android/app/build/outputs/apk/release/app-release.apk "carbumap-$v.apk"
 
-      # Crée la release du tag si elle n'existe pas, sinon y ajoute le fichier (FR-006).
+      # Crée la release du tag si elle n'existe pas, sinon y ajoute les fichiers (FR-006).
       - uses: softprops/action-gh-release@v2
         with:
-          files: carbumap-${{ steps.version.outputs.value }}.apk
+          files: |
+            carbumap-${{ steps.version.outputs.name }}.aab
+            carbumap-${{ steps.version.outputs.name }}.apk
           body: |
-            APK de la version ${{ steps.version.outputs.value }}, signé avec la clé de débogage
-            d'Android : l'installation demande d'autoriser les « sources inconnues ».
+            Version ${{ steps.version.outputs.name }} (versionCode ${{ steps.version.outputs.code }}).
+
+            - `.apk` : installation directe sur un appareil, en autorisant les « sources inconnues ».
+            - `.aab` : format attendu par le Play Store, à téléverser dans la Play Console.
+
             Android 8.0 (API 26) minimum.
