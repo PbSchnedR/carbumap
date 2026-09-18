@@ -20,11 +20,24 @@ carburant choisi (Gazole, SP95, E10, SP98, E85, GPL).
 
 Projet personnel, sans backend ni clé d'API.
 
+## Installation
+
+**Depuis le navigateur** (recommandé) : ouvrir <https://pbschnedr.github.io/carbumap/>, puis
+« Ajouter à l'écran d'accueil ». L'application s'ouvre ensuite en plein écran, avec son icône,
+comme une application installée — **sans aucun avertissement de sécurité**, puisque rien n'est
+installé hors magasin. Fonctionne aussi sur iPhone. Le site est republié à chaque poussée sur
+`main`, donc les mises à jour sont immédiates.
+
+**Depuis l'APK** : télécharger le `.apk` de la dernière release. Android affichera un
+avertissement « source inconnue » — inévitable en dehors du Play Store, y compris avec une
+signature de publication.
+
 ## Confidentialité
 
 Aucun compte, aucune publicité, aucune mesure d'audience. Seuls le carburant et le rayon choisis
 sont conservés localement. La position sert au classement et n'est jamais enregistrée. Détail des
-services interrogés : [docs/confidentialite.html](docs/confidentialite.html).
+services interrogés : [public/confidentialite.html](public/confidentialite.html), publié sur
+<https://pbschnedr.github.io/carbumap/confidentialite.html>.
 
 ## Données
 

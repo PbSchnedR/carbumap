@@ -8,6 +8,14 @@
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e9edf2" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d1117" />
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <!-- Installation depuis le navigateur : Android exige des PNG 192 et 512 dans le manifeste,
+         faute de quoi « Ajouter à l'écran d'accueil » reste désactivé. iOS ignore le manifeste
+         et lit `apple-touch-icon`. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icon-180.png" />
+    <meta name="apple-mobile-web-app-title" content="Carbumap" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <title>Carbumap — stations les moins chères</title>
   </head>
   <body>
