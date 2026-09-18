@@ -1,17 +1,13 @@
 import L from 'leaflet';
-import { useEffect, useImperativeHandle, useRef, type Ref } from 'react';
+import { useEffect, useRef } from 'react';
 import type { LatLng } from '../domain/distance';
 import { formatPrice } from '../domain/format';
 import type { RankedStation } from '../domain/ranking';
 import type { Station } from '../domain/stations';
 import { iconSvg } from './icons';
 
-export type MapHandle = { getCenter: () => LatLng };
-
 type Props = {
-  ref?: Ref<MapHandle>;
-  /** Sélection depuis la carte (003 FR-001) ; un second clic sur la station sélectionnée ouvre sa fiche. */
-  onSelectStation: (id: number) => void;
+  /** Toucher un repère ouvre directement la fiche de la station (003 FR-001). */
   onOpenCard: (id: number) => void;
   origin: LatLng | null;
   /** Stations issues de la dernière recherche : un nouveau tableau déclenche le recadrage. */
@@ -21,11 +17,6 @@ type Props = {
   selectedId: number | null;
   /** Hauteur (px) masquée en bas de la carte par le panneau mobile. */
   bottomPadding: number;
-  /**
-   * Appelé uniquement pour un déplacement ou un zoom **provoqué par l'utilisateur** (007 FR-023).
-   * Les recadrages internes — `fitBounds`, `panInside`, `setView` — n'en déclenchent aucun.
-   */
-  onUserMove: () => void;
 };
 
 const FRANCE_VIEW: L.LatLngExpression = [46.6, 2.4];
@@ -54,16 +45,13 @@ const zIndexFor = (isCheapest: boolean, isSelected: boolean) =>
   isSelected ? Z_SELECTED : isCheapest ? Z_CHEAPEST : 0;
 
 export function MapView({
-  ref,
   origin,
   stations,
   ranked,
   lowestIds,
   selectedId,
   bottomPadding,
-  onSelectStation,
   onOpenCard,
-  onUserMove,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -73,48 +61,16 @@ export function MapView({
   const paddingRef = useRef(bottomPadding);
   paddingRef.current = bottomPadding;
   // Lus au moment du clic : les repères ne sont pas reconstruits à chaque rendu.
-  const handlersRef = useRef({ selectedId, onSelectStation, onOpenCard });
-  handlersRef.current = { selectedId, onSelectStation, onOpenCard };
-  const onUserMoveRef = useRef(onUserMove);
-  onUserMoveRef.current = onUserMove;
-
-  /**
-   * Leaflet émet `moveend` aussi bien pour un geste de l'utilisateur que pour un recadrage que nous
-   * déclenchons nous-mêmes, sans jamais dire lequel. Ce drapeau est levé juste avant chacun de nos
-   * trois recadrages, et le gestionnaire l'abaisse sans rien signaler. Toute commande de carte
-   * ajoutée plus tard devra faire de même, sinon « Chercher ici » apparaîtra tout seul.
-   */
-  const programmaticMoveRef = useRef(false);
-  const moveProgrammatically = (run: () => void) => {
-    programmaticMoveRef.current = true;
-    run();
-  };
-
-  useImperativeHandle(ref, () => ({
-    getCenter: () => {
-      const center = mapRef.current?.getCenter();
-      return center ? { lat: center.lat, lon: center.lng } : { lat: 46.6, lon: 2.4 };
-    },
-  }));
-
+  const handlersRef = useRef({ onOpenCard });
+  handlersRef.current = { onOpenCard };
   // Création unique de la carte.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    // Contrôles en haut à droite : en bas, le panneau des stations les masquerait, et en haut à
-    // gauche le message d'état les recouvrirait. Le décalage sous la barre des filtres est appliqué
-    // en CSS par --map-controls-top.
-    const map = L.map(container, { zoomControl: false, attributionControl: false });
-    programmaticMoveRef.current = true;
-    map.setView(FRANCE_VIEW, 6);
-    map.on('moveend', () => {
-      if (programmaticMoveRef.current) {
-        programmaticMoveRef.current = false;
-        return;
-      }
-      onUserMoveRef.current();
-    });
-    L.control.zoom({ position: 'topright' }).addTo(map);
+    // Pas de boutons de zoom : le pincement sur mobile et la molette sur ordinateur suffisent.
+    // L'attribution reste en haut à droite — en bas, le panneau des stations la masquerait — et
+    // descend sous la barre des filtres via --map-controls-top.
+    const map = L.map(container, { zoomControl: false, attributionControl: false }).setView(FRANCE_VIEW, 6);
     L.control.attribution({ position: 'topright', prefix: false }).addTo(map);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -170,11 +126,8 @@ export function MapView({
         interactive: true,
         zIndexOffset: zIndexFor(isCheapest, isSelected),
       });
-      marker.on('click', () => {
-        const handlers = handlersRef.current;
-        if (handlers.selectedId === id) handlers.onOpenCard(id);
-        else handlers.onSelectStation(id);
-      });
+      // Un seul toucher ouvre la fiche, comme dans la liste : `onOpenCard` sélectionne aussi.
+      marker.on('click', () => handlersRef.current.onOpenCard(id));
       layer.addLayer(marker);
       markersRef.current.set(id, { marker, entry });
     }
@@ -198,11 +151,7 @@ export function MapView({
     refresh(selectedId);
     if (map && selectedId !== null && selectedId !== previousSelected.current) {
       const found = markersRef.current.get(selectedId);
-      if (found) {
-        moveProgrammatically(() =>
-          map.panInside(found.marker.getLatLng(), { paddingBottomRight: [0, paddingRef.current + 24] }),
-        );
-      }
+      if (found) map.panInside(found.marker.getLatLng(), { paddingBottomRight: [0, paddingRef.current + 24] });
     }
     previousSelected.current = selectedId;
   }, [selectedId, ranked, lowestIds]);
@@ -214,15 +163,13 @@ export function MapView({
     const points = [...markersRef.current.values()].map(({ marker }) => marker.getLatLng());
     points.push(L.latLng(origin.lat, origin.lon));
     if (points.length > 1) {
-      moveProgrammatically(() =>
-        map.fitBounds(L.latLngBounds(points), {
-          paddingTopLeft: [24, 24],
-          paddingBottomRight: [24, paddingRef.current + 24],
-          maxZoom: 15,
-        }),
-      );
+      map.fitBounds(L.latLngBounds(points), {
+        paddingTopLeft: [24, 24],
+        paddingBottomRight: [24, paddingRef.current + 24],
+        maxZoom: 15,
+      });
     } else {
-      moveProgrammatically(() => map.setView([origin.lat, origin.lon], 13));
+      map.setView([origin.lat, origin.lon], 13);
     }
     // Uniquement quand une recherche aboutit (nouveau tableau de stations).
   }, [stations]);

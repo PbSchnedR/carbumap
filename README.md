@@ -3,8 +3,7 @@
 Carte web des stations-service autour de vous, classées de la moins chère à la plus chère pour le
 carburant choisi (Gazole, SP95, E10, SP98, E85, GPL).
 
-- Localisation de l'appareil, ou recherche autour du centre de la carte : le bouton « Chercher ici »
-  apparaît sur la carte dès qu'on la déplace ou qu'on zoome, et disparaît une fois la recherche faite.
+- Localisation de l'appareil, ou recherche d'une ville ou d'une adresse pour voir les prix ailleurs.
 - Rayon de 5, 10 ou 20 km.
 - Prix, distance à vol d'oiseau et date de mise à jour ; prix de plus de 7 jours signalés « ancien ».
 - Station(s) au prix le plus bas mises en avant dans la liste et sur la carte.
@@ -14,8 +13,8 @@ carburant choisi (Gazole, SP95, E10, SP98, E85, GPL).
 - Sur mobile : carte plein écran, deux rangées de commandes posées dessus (les six carburants tous
   visibles, sans défilement horizontal), et la liste dans un panneau glissant (replié, mi-hauteur,
   plein écran) où le prix domine chaque ligne.
-- Sélection d'une station depuis la liste **ou** depuis son étiquette de prix sur la carte.
-- Recherche d'un lieu (ville ou adresse) pour voir les prix ailleurs, avec retour à sa position.
+- Un seul toucher sur une ligne ou sur une étiquette de prix ouvre la fiche de la station.
+- Zoom au pincement ou à la molette : pas de boutons + / − sur la carte.
 - Fiche station : distance, prix de tous les carburants proposés, photo de rue quand il en existe une,
   et raccourcis « Voir dans Google Maps » et « Itinéraire ».
 
@@ -57,7 +56,7 @@ React 19 · TypeScript 7 · Tailwind CSS 4 · Leaflet 1.9 (tuiles OpenStreetMap)
 react-modal-sheet (panneau mobile) · IBM Plex Sans (police auto-hébergée, donc identique hors ligne) ·
 Capacitor 8 (enveloppe Android) · Vite 8 · Vitest 5.
 
-Les pictogrammes sont huit tracés SVG écrits dans `src/components/icons.tsx` : pas de librairie
+Les pictogrammes sont sept tracés SVG écrits dans `src/components/icons.tsx` : pas de librairie
 d'icônes, et aucun emoji dans l'interface.
 
 ## Application Android (APK)

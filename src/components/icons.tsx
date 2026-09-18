@@ -16,7 +16,6 @@ export type IconName =
   | 'arrowLeft'
   | 'arrowUp'
   | 'arrowDown'
-  | 'crosshair'
   | 'locate';
 
 /** Contenu de chaque icône dans une boîte de 24 × 24. */
@@ -27,8 +26,6 @@ const PATHS: Record<IconName, string> = {
   arrowLeft: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
   arrowUp: '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',
   arrowDown: '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
-  crosshair:
-    '<circle cx="12" cy="12" r="8"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/>',
   locate:
     '<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 1v3"/><path d="M12 20v3"/><path d="M1 12h3"/><path d="M20 12h3"/>',
 };

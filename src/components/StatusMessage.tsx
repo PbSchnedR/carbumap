@@ -20,7 +20,10 @@ export function StatusMessage({ status, isEmpty, onRetry }: Props) {
       lines = ['Chargement des prix…'];
       break;
     case 'no-position':
-      lines = [`Position indisponible. ${GEOLOCATION_MESSAGES[status.reason]}`, 'Déplacez la carte puis touchez « Chercher ici ».'];
+      lines = [
+        `Position indisponible. ${GEOLOCATION_MESSAGES[status.reason]}`,
+        'Cherchez une ville ou une adresse pour voir les prix.',
+      ];
       break;
     case 'error':
       lines = [status.error];

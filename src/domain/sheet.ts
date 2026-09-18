@@ -7,8 +7,3 @@ const CYCLE: Record<SheetPosition, SheetPosition> = { collapsed: 'half', half: '
 export function nextSheetPosition(position: SheetPosition): SheetPosition {
   return CYCLE[position];
 }
-
-/** Après la sélection d'une station, le panneau passe à mi-hauteur pour laisser voir la carte. */
-export function positionAfterSelection(_position: SheetPosition): SheetPosition {
-  return 'half';
-}

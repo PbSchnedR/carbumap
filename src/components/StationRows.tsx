@@ -8,13 +8,17 @@ type Props = {
   ranked: RankedStation[];
   lowestIds: Set<number>;
   selectedId: number | null;
-  onSelect: (id: number) => void;
   onOpenCard: (id: number) => void;
   now: Date;
 };
 
-/** Lignes mobiles : le prix domine, le reste passe au second plan (006 US2). */
-export function StationRows({ ranked, lowestIds, selectedId, onSelect, onOpenCard, now }: Props) {
+/**
+ * Lignes mobiles : le prix domine, le reste passe au second plan (006 US2).
+ *
+ * Un seul toucher ouvre la fiche. L'étape intermédiaire — sélectionner, puis toucher « Détails » —
+ * a été retirée : elle imposait deux gestes là où l'intention est évidente.
+ */
+export function StationRows({ ranked, lowestIds, selectedId, onOpenCard, now }: Props) {
   const selectedRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export function StationRows({ ranked, lowestIds, selectedId, onSelect, onOpenCar
           <li key={station.id} ref={isSelected ? selectedRef : undefined}>
             <button
               type="button"
-              onClick={() => (isSelected ? onOpenCard(station.id) : onSelect(station.id))}
+              onClick={() => onOpenCard(station.id)}
               aria-current={isSelected ? 'true' : undefined}
               className={`motion flex min-h-11 w-full flex-col gap-0.5 px-4 py-2.5 text-left focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-brand ${
                 isSelected ? 'bg-brand-soft' : isCheapest ? 'bg-cheap-soft' : 'bg-surface'
@@ -64,17 +68,6 @@ export function StationRows({ ranked, lowestIds, selectedId, onSelect, onOpenCar
                 </span>
               )}
             </button>
-            {isSelected && (
-              <div className="bg-brand-soft px-4 pb-3">
-                <button
-                  type="button"
-                  onClick={() => onOpenCard(station.id)}
-                  className="motion inline-flex min-h-11 items-center rounded-pill border-2 border-brand px-4 text-label font-semibold text-brand focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                  Détails
-                </button>
-              </div>
-            )}
           </li>
         );
       })}

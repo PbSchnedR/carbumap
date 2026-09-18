@@ -13,6 +13,8 @@ export function PlaceSearch({ onSelect, variant }: Props) {
   const { query, setQuery, places, status, reset } = usePlaceSearch();
   const [isOpen, setIsOpen] = useState(variant === 'inline');
   const [activeIndex, setActiveIndex] = useState(-1);
+  // Position verticale du champ déplié, mesurée à l'ouverture (voir le rendu `collapsible`).
+  const [panelTop, setPanelTop] = useState(0);
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -115,6 +117,8 @@ export function PlaceSearch({ onSelect, variant }: Props) {
         aria-label="Chercher un lieu"
         aria-expanded={isOpen}
         onClick={() => {
+          const rect = rootRef.current?.getBoundingClientRect();
+          if (rect) setPanelTop(rect.bottom + 8);
           setIsOpen((open) => !open);
           setTimeout(() => inputRef.current?.focus(), 0);
         }}
@@ -122,7 +126,14 @@ export function PlaceSearch({ onSelect, variant }: Props) {
       >
         <Icon name="search" />
       </button>
-      {isOpen && <div className="absolute top-12 right-0 z-20 w-[min(20rem,calc(100vw-1.5rem))]">{field}</div>}
+      {/* `fixed` calé sur les bords de l'écran, et non `absolute right-0` sur le bouton : le bouton
+          se trouve au milieu de la rangée, si bien qu'une boîte large ancrée sur lui débordait de
+          l'écran par la gauche. Le z-index passe au-dessus du message d'état, qu'il recouvrait. */}
+      {isOpen && (
+        <div className="fixed inset-x-3 z-[1300]" style={{ top: panelTop }}>
+          {field}
+        </div>
+      )}
     </div>
   );
 }

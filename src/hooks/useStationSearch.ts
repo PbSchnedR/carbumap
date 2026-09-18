@@ -18,13 +18,13 @@ export type StationSearch = {
   origin: SearchOrigin | null;
   /** Stations à 20 km, avant filtrage par carburant et rayon. */
   stations: Station[];
-  search: (position: LatLng, kind: 'device' | 'map' | 'place', label?: string) => void;
+  search: (position: LatLng, kind: 'device' | 'place', label?: string) => void;
   /** Relance la géolocalisation puis la recherche autour de l'appareil. */
   locate: () => void;
   retry: () => void;
 };
 
-function toOrigin(position: LatLng, kind: 'device' | 'map' | 'place', label?: string): SearchOrigin {
+function toOrigin(position: LatLng, kind: 'device' | 'place', label?: string): SearchOrigin {
   if (kind === 'place') return { kind, position, label: label ?? '' };
   return { kind, position };
 }
@@ -36,7 +36,7 @@ export function useStationSearch(): StationSearch {
   const searchId = useRef(0);
 
   const search = useCallback(
-    async (position: LatLng, kind: 'device' | 'map' | 'place', label?: string) => {
+    async (position: LatLng, kind: 'device' | 'place', label?: string) => {
       const id = ++searchId.current;
       setOrigin(toOrigin(position, kind, label));
       setStations([]);

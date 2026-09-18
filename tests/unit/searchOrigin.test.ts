@@ -12,10 +12,6 @@ describe('originLabel', () => {
     expect(originLabel({ kind: 'device', position: POSITION })).toBe('Ma position');
   });
 
-  it('nomme le centre de la carte', () => {
-    expect(originLabel({ kind: 'map', position: POSITION })).toBe('Zone de la carte');
-  });
-
   it('affiche le libellé du lieu choisi', () => {
     expect(originLabel({ kind: 'place', position: POSITION, label: 'Gennevilliers' })).toBe('Gennevilliers');
   });

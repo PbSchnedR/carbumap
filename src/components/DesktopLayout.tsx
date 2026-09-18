@@ -8,8 +8,6 @@ type Props = {
   card: ReactNode | null;
   map: ReactNode;
   status: ReactNode;
-  /** « Chercher ici » : posé sur la carte, jamais dans la colonne (FR-022, FR-023). */
-  searchHere: ReactNode | null;
 };
 
 /**
@@ -20,7 +18,7 @@ type Props = {
  * navigateurs remettent `scrollTop` à zéro quand la boîte de mise en page disparaît (FR-007, SC-013).
  * `inert` met le tableau hors d'atteinte du clavier et des lecteurs d'écran pendant ce temps.
  */
-export function DesktopLayout({ controls, table, card, map, status, searchHere }: Props) {
+export function DesktopLayout({ controls, table, card, map, status }: Props) {
   return (
     <div className="flex h-full overflow-hidden">
       <aside
@@ -47,11 +45,8 @@ export function DesktopLayout({ controls, table, card, map, status, searchHere }
 
       <div className="relative min-w-0 flex-1">
         {map}
-        {/* Une seule pile centrée en haut de la carte : le message d'état, puis « Chercher ici ».
-            Empilés plutôt que superposés, ils peuvent s'afficher ensemble sans se recouvrir. */}
-        <div className="pointer-events-none absolute inset-x-0 top-3 z-[1050] flex flex-col items-center gap-2 px-4">
+        <div className="pointer-events-none absolute inset-x-0 top-3 z-[1050] flex justify-center px-4">
           <div className="pointer-events-auto max-w-md">{status}</div>
-          {searchHere && <div className="pointer-events-auto">{searchHere}</div>}
         </div>
       </div>
     </div>
